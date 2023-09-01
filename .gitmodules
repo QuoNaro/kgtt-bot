@@ -1,0 +1,9 @@
+[submodule "git_submodules/tiny-vk"]
+	path = git_submodules/tiny-vk
+	url = https://github.com/QuoNaro/tiny-vk
+[submodule "git_submodules/green-box"]
+	path = git_submodules/green-box
+	url = https://github.com/QuoNaro/green-box
+[submodule "git_submodules/ruobr-student"]
+	path = git_submodules/ruobr-student
+	url = https://github.com/QuoNaro/ruobr-student
