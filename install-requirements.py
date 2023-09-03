@@ -1,8 +1,6 @@
 import os
 
 
-# TODO : Добавить автоматическую установку суб-модулей 
-
 # Установка глобальных зависимостей проекта
 os.system('pip install --upgrade pip')
 os.system('pip install -r requirements.txt')
