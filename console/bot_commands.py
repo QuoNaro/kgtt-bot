@@ -1,11 +1,13 @@
 import click
+from loguru import logger
 
 from tiny_vk.utils import user_message
 from tiny_vk.database import Database
 
-from config.cfg import current_dir,token,database_abs_path
-
+from config.cfg import current_dir,token,database_abs_path,tableid
+from bot.utils.schedule import write_json,TableParser,get_global_dictionary
 from console.main import cli
+
 
 
 @cli.group
@@ -34,8 +36,9 @@ def message_users(m):
 
 @bot.command()
 @click.option('-t',prompt="Введите токен для бота", help="Токен бота", type = str)
+@click.option('-i',prompt="Введите ID гугл таблицы", help="Период обновления расписнаия", type = str)
 @click.option('-r',prompt="Введите период обновления расписания (в секундах)", help="Период обновления расписнаия", type = int)
-def config(t,r):
+def config(t,r,i):
     with open(f'{current_dir}/config/.env','w') as file:
         file.write(f'TOKEN={t}')
     with open(f'{current_dir}/config/cfg.py','r') as cfg:
@@ -43,5 +46,15 @@ def config(t,r):
     for parameter in base_config.splitlines():
         if 'event_reload_time' in parameter:
             base_config = base_config.replace(parameter, f'event_reload_time = {r}') 
+        if 'tableid' in parameter :
+            base_config = base_config.replace(parameter, f'tableid = {i}')
     with open(f'{current_dir}/config/cfg.py','w') as cfg:
         cfg.write(base_config)
+        
+        
+@bot.command()
+def generate_schedule():
+    tableparser = TableParser(tableid)
+    json = get_global_dictionary(tableparser)
+    write_json(f'{current_dir}/schedule.json',json)
+    logger.INFO('Создан файл с расписанием')
