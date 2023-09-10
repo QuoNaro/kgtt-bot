@@ -1,2 +1,2 @@
 import os
-from console.main import cli
+from .main import cli
