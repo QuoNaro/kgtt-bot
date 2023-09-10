@@ -6,11 +6,11 @@ cd kgtt-bot
 git submodule init && git submodule update
 
 # Создание виртуального окружения
-sudo python -m virtualenv virtualenv
-source virtualenv/bin/activate.fish
+sudo python3 -m virtualenv virtualenv
+source virtualenv/bin/activate
 
 # Развертнывание командной оболочки бота
-python3 -m pip install -r requirements.txt
+sudo python3 -m pip install -r requirements.txt
 # pyinstaller --onefile bin/botmgmt.py
 
 cp bin/botmgmt.py ~/bin/botmgmt
