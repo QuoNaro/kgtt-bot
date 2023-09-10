@@ -1,10 +1,6 @@
 import os
 
 
-# Создание виртуального окружения
-os.system('sudo python -m virtualenv .venv')
-os.system('source .venv/bin/activate.fish')
-
 # Установка глобальных зависимостей проекта
 os.system('git submodule init && git submodule update')
 os.system('pip install --upgrade pip')
