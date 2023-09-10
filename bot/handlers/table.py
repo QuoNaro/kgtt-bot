@@ -3,7 +3,6 @@ from bot.utils.schedule import read_json,get_text
 from bot.data import keyboards
 from bot.data import states
 from bot.data import emoji
-from config.cfg import json_abs_path
 
 from bot.utils.schedule import exceptions
 from bot.logs.logging import *

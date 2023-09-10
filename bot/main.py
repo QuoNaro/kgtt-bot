@@ -1,7 +1,11 @@
 from tiny_vk import Bot
-from config.cfg import token,database_abs_path
+import toml
 
-bot = Bot(token,dbfile=database_abs_path,table_name="Users", columns= {'object' : 'TEXT',
+# Открытие конфига
+with open('config.toml','r') as tml:
+  config = toml.load(tml)
+
+bot = Bot(config['token'],dbfile=config['db-path'],table_name="Users", columns= {'object' : 'TEXT',
                                              'ruobr_login' : 'TEXT',
                                              'ruobr_password' : 'TEXT',
                                              'ruobr_tmp_login': 'TEXT',
