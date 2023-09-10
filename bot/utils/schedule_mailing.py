@@ -10,9 +10,9 @@ from types import GeneratorType
 from bot.utils.schedule import write_json,read_json,get_global_dictionary,TableParser,get_text
 from tiny_vk.database import Database
 from tiny_vk.utils import user_message
-from config.cfg import token,event_reload_time,current_dir,database_abs_path
+from config.cfg import token,event_reload_time,current_dir,database_abs_path,json_abs_path
 
-json_path = 'schedule.json'
+
 logger.add(f"{current_dir}/bot/logs/schedule_updates.log", level='INFO',format="<{level}> {time} - {message}", rotation="10MB", compression="zip")
 
 class ScheduleMailing:
@@ -67,6 +67,6 @@ class ScheduleMailing:
         except Exception:
           continue
           
-      write_json(json_path, new_json)
+      write_json(json_abs_path, new_json)
       logger.info("Файл-расписание обновлен!")
       

@@ -3,7 +3,7 @@ from bot.utils.schedule import read_json,get_text
 from bot.data import keyboards
 from bot.data import states
 from bot.data import emoji
-
+from config.cfg import json_abs_path
 
 from bot.utils.schedule import exceptions
 from bot.logs.logging import *
@@ -28,7 +28,7 @@ class Authentification:
 def from_table(self):
     if self.object:
       try:
-        group_dictionary_table = read_json('schedule.json')[self.object]
+        group_dictionary_table = read_json(json_abs_path)[self.object]
         schedule = get_text(group_dictionary_table)
         bot.utils.user_message(schedule)
       except FileNotFoundError as e:

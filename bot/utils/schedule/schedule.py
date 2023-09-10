@@ -16,7 +16,6 @@ class TableParser:
         self.primary_table.float_to_integer()
     
     def get_title(self) -> str:
-        # TODO : Изменить на более универсальное решение
         for string in self.primary_table[0]:
             if isinstance(string,str):
                 split_str = string.split(' ')
