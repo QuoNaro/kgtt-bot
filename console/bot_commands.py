@@ -37,7 +37,7 @@ def message_users(m):
 @click.option('-r',prompt="Введите период обновления расписания (в секундах)", help="Период обновления расписнаия", type = int)
 def config(t,r):
     with open(f'{current_dir}/config/.env','w') as file:
-        file.write(t)
+        file.write(f'TOKEN={t}')
     with open(f'{current_dir}/config/cfg.py','r') as cfg:
         base_config = cfg.read()
     for parameter in base_config.splitlines():
