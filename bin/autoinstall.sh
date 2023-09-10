@@ -10,7 +10,7 @@ sudo python -m virtualenv virtualenv
 source virtualenv/bin/activate.fish
 
 # Развертнывание командной оболочки бота
-pip install -r requirements.txt
+python3 -m pip install -r requirements.txt
 # pyinstaller --onefile bin/botmgmt.py
 
 cp bin/botmgmt.py ~/bin/botmgmt
