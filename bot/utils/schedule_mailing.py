@@ -15,7 +15,7 @@ from tiny_vk.utils import user_message
 with open('config.toml','r') as tml:
   config = toml.load(tml)
 
-logger.add(f"schedule_updates.log", level='INFO',format="<{level}> {time} - {message}", rotation="10MB", compression="zip")
+logger.add(f"bot/schedule_updates.log", level='INFO',format="<{level}> {time} - {message}", rotation="10MB", compression="zip")
 
 class ScheduleMailing:
   

@@ -5,4 +5,4 @@ import toml
 with open('config.toml','r') as tml:
   config = toml.load(tml)
   
-logger.add(f"logs.log", format="<{level}> {time} - {message}", rotation="10MB", compression="zip")
+logger.add(f"bot/logs.log", format="<{level}> {time} - {message}", rotation="10MB", compression="zip")
