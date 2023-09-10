@@ -23,7 +23,9 @@ def init(database,schedule):
         logger.info('Данные из гугл таблицы получены!')
         
     if database:
-        Database(config['db-path'],'Users').create_table({'id': "INT",'object' : 'TEXT',
+        Database(config['db-path'],'Users').create_table({'id': "INT",
+                                                "state" : "TEXT",
+                                                'object' : 'TEXT',
                                                 'ruobr_login' : 'TEXT',
                                                 'ruobr_password' : 'TEXT',
                                                 'ruobr_tmp_login': 'TEXT',
