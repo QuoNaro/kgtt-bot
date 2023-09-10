@@ -20,7 +20,7 @@ def init(env):
 Description = KGTT Bot module
 
 [Service]
-ExecStart = {env} {parrent_path}/{name}.py
+ExecStart = {env} {parrent_path}/start_{name}.py
 Restart = always
 
 [Install]
