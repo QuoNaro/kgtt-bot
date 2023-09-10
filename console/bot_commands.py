@@ -47,7 +47,7 @@ def config(t,r,i):
         if 'event_reload_time' in parameter:
             base_config = base_config.replace(parameter, f'event_reload_time = {r}') 
         if 'tableid' in parameter :
-            base_config = base_config.replace(parameter, f'tableid = {i}')
+            base_config = base_config.replace(parameter, f'tableid = "{i}" ')
     with open(f'{current_dir}/config/cfg.py','w') as cfg:
         cfg.write(base_config)
         
@@ -57,4 +57,4 @@ def generate_schedule():
     tableparser = TableParser(tableid)
     json = get_global_dictionary(tableparser)
     write_json(f'{current_dir}/schedule.json',json)
-    logger.INFO('Создан файл с расписанием')
+    logger.info('Создан файл с расписанием')
