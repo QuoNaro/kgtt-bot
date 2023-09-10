@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Инициализация репозитория и суб-модулей
 git clone https://github.com/QuoNaro/kgtt-bot.git
 cd kgtt-bot
