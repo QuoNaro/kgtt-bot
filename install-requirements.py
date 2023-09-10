@@ -2,6 +2,8 @@ import os
 
 
 # Установка глобальных зависимостей проекта
+# TODO : Добавить обновление суб-модулей git
+
 os.system('pip install --upgrade pip')
 os.system('pip install -r requirements.txt')
 
