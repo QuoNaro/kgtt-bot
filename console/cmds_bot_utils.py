@@ -21,9 +21,13 @@ def message(i,m):
 @utils.command()
 @click.option('-m',prompt="Введите сообщение пользователям", help="Сообщение пользователям", type = str)
 @click.option('--database',is_flag = True)
-def messages(m,d):
+def messages(m,database):
     
-    if d:
+    if database:
+        db = Database(f'{global_dir}/{config["db-path"]}','Users')
+        user_ids = db.get_users()
+    
+    else:
         vk_session = vk_api.VkApi(token=config['token'])
         vk = vk_session.get_api()
 
@@ -37,13 +41,11 @@ def messages(m,d):
             if peer['type'] == 'user':
                 user_ids.append(peer['id'])
 
-    else:
-        db = Database(f'{global_dir}/{config["db-path"]}','Users')
-        user_ids = db.get_users()
-    
+        
     for i in user_ids:
         try:
             user_message(config['token'],i,m)
         except Exception:
             print(i)
             pass
+      
