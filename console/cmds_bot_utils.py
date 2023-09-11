@@ -4,11 +4,7 @@ from tiny_vk.utils import user_message
 from tiny_vk.database import Database
 
 from console.main import cli
-
-import toml
-
-with open('~/.config/kgttbotconfig.toml','r') as tml:
-    config = toml.load(tml)
+from config import config
 
 
 @cli.group

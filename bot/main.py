@@ -1,9 +1,5 @@
 from tiny_vk import Bot
-import toml
-
-# Открытие конфига
-with open('~/.config/kgttbotconfig.toml','r') as tml:
-  config = toml.load(tml)
+from config import config
 
 bot = Bot(config['token'],dbfile=config['db-path'],table_name="Users", columns= {'object' : 'TEXT',
                                              'ruobr_login' : 'TEXT',

@@ -1,7 +1,7 @@
 from .main import cli
 import click
 import toml
-import subprocess
+from config import config_abspath
 
 @cli.command
 @click.option('-t',prompt="Токен для бота", help="Токен бота", type = str)
@@ -19,8 +19,7 @@ def make_config(t,i,r,d,j):
                    'json-path': j}
     
     
-    with open('kgttbotconfig.toml','w') as tml:
+    with open(config_abspath,'w') as tml:
         toml.dump(dict_config,tml)
-    subprocess.call(['sudo','mkdir','~/.config'])
-    subprocess.call(['sudo','mv','kgttbotconfig.toml','~/.config/'])
+    
 

@@ -1,14 +1,8 @@
 
 import click
-import toml
 from tiny_vk.database import Database
 from console.main import cli
-
-
-
-# Открытие конфига
-with open('~/.config/kgttbotconfig.toml','r') as tml:
-        config = toml.load(tml)
+from config import config
 
 db = Database(config['db-path'],'Users')
 

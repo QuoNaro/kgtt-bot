@@ -6,16 +6,14 @@ import vk_api.exceptions
 
 from loguru import logger
 from types import GeneratorType
-import toml
+from config import config
 from bot.utils.schedule import write_json,read_json,get_global_dictionary,TableParser,get_text
 from tiny_vk.database import Database
 from tiny_vk.utils import user_message
 
-# Открытие конфига
-with open('~/.config/kgttbotconfig.toml','r') as tml:
-  config = toml.load(tml)
 
-logger.add(f"bot/schedule_updates.log", level='INFO',format="<{level}> {time} - {message}", rotation="10MB", compression="zip")
+
+logger.add(f"logs/schedule.log", level='INFO',format="<{level}> {time} - {message}", rotation="10MB", compression="zip")
 
 class ScheduleMailing:
   

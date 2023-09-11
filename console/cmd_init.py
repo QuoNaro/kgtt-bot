@@ -1,14 +1,10 @@
 import click
 from loguru import logger
-import toml
-
 from bot.utils.schedule import get_global_dictionary,write_json,TableParser
 from tiny_vk.database import Database
 from console.main import cli
+from config import config
 
-# Загрузка конфигурации
-with open('~/.config/kgttbotconfig.toml','r') as tml:
-    config = toml.load(tml)
 
 @cli.command
 @click.option('--database',help="db-path",is_flag = True)

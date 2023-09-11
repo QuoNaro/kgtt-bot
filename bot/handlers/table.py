@@ -3,13 +3,12 @@ from bot.utils.schedule import read_json,get_text
 from bot.data import keyboards
 from bot.data import states
 from bot.data import emoji
-import toml
+from config import config
 from bot.utils.schedule import exceptions
 from bot.logs.logging import *
 from loguru import logger
 
-with open('~/.config/kgttbotconfig.toml','r') as tml:
-    config = toml.load(tml)
+
 
 @bot.on.multiply(['Расписание'], [states.main], next_state=states.schedule)
 def schedule(self):
