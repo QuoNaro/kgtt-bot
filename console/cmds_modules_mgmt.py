@@ -46,6 +46,7 @@ def init_supervisor(env):
     subprocess.call(['python3','-m','pip', 'install', 'supervisor'])
     unit_names = ('kgttbot','schedule_mailing')
     parrent_path = Path(__file__).parent.cwd()
+    subprocess.call(['mkdir', f'{parrent_path}/logs'])
     for name in unit_names:
         unit_content = f'''
         [program:{name}]
