@@ -26,20 +26,21 @@ def to_main_state(self):
     bot.db.set_state(states.main)
 
 
-@bot.on.message('!рофф')
-@bot.on.empty('self.id == 435170678')
+@bot.on.empty('True')
 def stop_mailing(self):
-    command = "sudo supervisorctl stop schedule_mailing"
-    os.system(command)
-    bot.utils.user_message('Рассылка отключена!',id = 435170678)
+    if self.id == 435170678 and self.text == '!рофф':
+        command = "sudo supervisorctl stop schedule_mailing"
+        os.system(command)
+        bot.utils.user_message('Рассылка отключена!',id = 435170678)
     
     
     
-@bot.on.message('!рон')
-@bot.on.empty('self.id == 435170678')
+
+@bot.on.empty('True')
 def start_mailing(self):
-    command = "sudo supervisorctl start schedule_mailing"
-    os.system(command)
-    bot.utils.user_message('Рассылка запущена!', id = 435170678)
+    if self.id == 435170678 and self.text == '!рон':
+        command = "sudo supervisorctl start schedule_mailing"
+        os.system(command)
+        bot.utils.user_message('Рассылка запущена!', id = 435170678)
 
     
