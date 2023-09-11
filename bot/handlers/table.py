@@ -8,7 +8,7 @@ from bot.utils.schedule import exceptions
 from bot.logs.logging import *
 from loguru import logger
 
-with open('config.toml','r') as tml:
+with open('~/.config/kgttbotconfig.toml','r') as tml:
     config = toml.load(tml)
 
 @bot.on.multiply(['Расписание'], [states.main], next_state=states.schedule)

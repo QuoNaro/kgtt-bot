@@ -7,7 +7,7 @@ from console.main import cli
 
 import toml
 
-with open('config.toml','r') as tml:
+with open('~/.config/kgttbotconfig.toml','r') as tml:
     config = toml.load(tml)
 
 

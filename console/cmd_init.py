@@ -7,7 +7,7 @@ from tiny_vk.database import Database
 from console.main import cli
 
 # Загрузка конфигурации
-with open('config.toml','r') as tml:
+with open('~/.config/kgttbotconfig.toml','r') as tml:
     config = toml.load(tml)
 
 @cli.command

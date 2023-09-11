@@ -2,7 +2,7 @@ from tiny_vk import Bot
 import toml
 
 # Открытие конфига
-with open('config.toml','r') as tml:
+with open('~/.config/kgttbotconfig.toml','r') as tml:
   config = toml.load(tml)
 
 bot = Bot(config['token'],dbfile=config['db-path'],table_name="Users", columns= {'object' : 'TEXT',

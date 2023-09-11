@@ -12,7 +12,7 @@ from tiny_vk.database import Database
 from tiny_vk.utils import user_message
 
 # Открытие конфига
-with open('config.toml','r') as tml:
+with open('~/.config/kgttbotconfig.toml','r') as tml:
   config = toml.load(tml)
 
 logger.add(f"bot/schedule_updates.log", level='INFO',format="<{level}> {time} - {message}", rotation="10MB", compression="zip")

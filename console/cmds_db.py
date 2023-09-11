@@ -7,7 +7,7 @@ from console.main import cli
 
 
 # Открытие конфига
-with open('config.toml','r') as tml:
+with open('~/.config/kgttbotconfig.toml','r') as tml:
         config = toml.load(tml)
 
 db = Database(config['db-path'],'Users')
