@@ -11,7 +11,7 @@ def modules():
 
 @modules.command
 @click.option('--env', prompt = "Интерпретатор",help = "Путь до интерпретатора python")
-def init(env):
+def init_systemd(env):
     unit_names = ('kgttbot','schedule_mailing')
     parrent_path = Path(__file__).parent.cwd()
     for name in unit_names:
@@ -37,52 +37,30 @@ WantedBy = multi-user.target
     # Перезагрузка демонов
     subprocess.call(['sudo', 'systemctl', 'daemon-reload'])
 
-@modules.command()
-@click.option('--schedule_mailing',is_flag = True)
-@click.option('--bot',is_flag = True)
-def enable(schedule_mailing,bot):
-    if schedule_mailing:
-        subprocess.call(['sudo', 'systemctl','enable','schedule_mailing.service'])
-    
-    if bot:
-        subprocess.call(['sudo', 'systemctl','enable','kgttbot.service'])
-    
-@modules.command()
-@click.option('--schedule_mailing',is_flag = True)
-@click.option('--bot',is_flag = True)
-def disable(schedule_mailing,bot):
-    if schedule_mailing:
-        subprocess.call(['sudo', 'systemctl','disable','schedule_mailing.service'])
-    
-    if bot:
-        subprocess.call(['sudo', 'systemctl','disable','kgttbot.service'])
-    
-@modules.command()
-@click.option('--schedule_mailing',is_flag = True)
-@click.option('--bot',is_flag = True)
-def start(schedule_mailing,bot):
-    if schedule_mailing:
-        subprocess.call(['sudo', 'systemctl','start','schedule_mailing.service'])
-    
-    if bot:
-        subprocess.call(['sudo', 'systemctl','start','kgttbot.service'])
 
-@modules.command()
-@click.option('--schedule_mailing',is_flag = True)
-@click.option('--bot',is_flag = True)
-def restart(schedule_mailing,bot):
-    if schedule_mailing:
-        subprocess.call(['sudo', 'systemctl','restart','schedule_mailing.service'])
+@modules.command
+@click.option('--env', prompt = "Интерпретатор",help = "Путь до интерпретатора python")
+def init_supervisor(env):
     
-    if bot:
-        subprocess.call(['sudo', 'systemctl','restart','kgttbot.service'])
+    #Установка supervisor
+    subprocess.call(['sudo', 'pip', 'install', 'supervisor'])
+    unit_names = ('kgttbot','schedule_mailing')
+    parrent_path = Path(__file__).parent.cwd()
+    for name in unit_names:
+        unit_content = f'''
+        [program:{name}]
+        command={env} {parrent_path}/start_{name}.py
+        autostart=true
+        autorestart=true'''
+        # Запись в папку
+        with open(f'{parrent_path}/{name}.conf', 'w') as unit_file:
+            unit_file.write(unit_content)   
+    
+        # Перемещение в папку процессов supervisor
+        supervisor_dir = '/etc/supervisor/conf.d/'
+        subprocess.call(['sudo','mv',f'{parrent_path}/{name}.conf',supervisor_dir])
+        
+    # Перезагрузка демонов
+    subprocess.call(['sudo', 'supervisorctl', 'daemon-reload'])
 
-@modules.command()
-@click.option('--schedule_mailing',is_flag = True)
-@click.option('--bot',is_flag = True)
-def stop(schedule_mailing,bot):
-    if schedule_mailing:
-        subprocess.call(['sudo', 'systemctl','stop','schedule_mailing.service'])
-    
-    if bot:
-        subprocess.call(['sudo', 'systemctl','stop','kgttbot.service'])
+
