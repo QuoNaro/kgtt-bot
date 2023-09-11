@@ -314,7 +314,7 @@ def get_text(dictionary : dict) -> str :
     formatting ={'numbers' : '({numbers})',
                  'time' : '|{time}|',
                  'cabinets' : '[{cabinets}]',
-                 'lessons' : ' \n{lessons}',
+                 'lessons' : ' {lessons}',
                  'teachers' : ' - {teachers}',
                  'distance' : ' -> {distance}'}
     

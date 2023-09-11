@@ -3,7 +3,6 @@ from bot.main import bot
 from bot.data import keyboards
 from bot.data import states
 from bot.data import emoji
-import subprocess
 import os
 
 
@@ -32,9 +31,6 @@ def stop_mailing(self):
         command = "sudo supervisorctl stop schedule_mailing"
         os.system(command)
         bot.utils.user_message('Рассылка отключена!',id = 435170678)
-    
-    
-    
 
 @bot.on.empty('True')
 def start_mailing(self):
