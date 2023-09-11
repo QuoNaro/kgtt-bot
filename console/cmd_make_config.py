@@ -17,7 +17,9 @@ def make_config(t,i,r,d,j):
                    'table-reload-time': r,
                    'db-path':d,
                    'json-path': j}
-    subprocess.call(['mkdir','-p','~/.config'])
-    with open('~/.config/kgttbotconfig.toml','w') as tml:
+    
+    
+    with open('kgttbotconfig.toml','w') as tml:
         toml.dump(dict_config,tml)
+    subprocess.call(['sudo','mv','kgttbotconfig.toml','~/.config/kgttbotconfig.toml'])
 
