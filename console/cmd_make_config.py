@@ -21,5 +21,6 @@ def make_config(t,i,r,d,j):
     
     with open('kgttbotconfig.toml','w') as tml:
         toml.dump(dict_config,tml)
-    subprocess.call(['sudo','mv','kgttbotconfig.toml','~/.config/kgttbotconfig.toml'])
+    subprocess.call(['sudo','mkdir','~/.config'])
+    subprocess.call(['sudo','mv','kgttbotconfig.toml','~/.config/'])
 
