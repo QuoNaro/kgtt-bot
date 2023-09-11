@@ -4,6 +4,7 @@ from bot.data import keyboards
 from bot.data import states
 from bot.data import emoji
 import subprocess
+import os
 
 
 
@@ -29,20 +30,16 @@ def to_main_state(self):
 @bot.on.empty('self.id == 435170678')
 def stop_mailing(self):
     command = "sudo supervisorctl stop schedule_mailing"
-    output = subprocess.check_output(command, shell=True, text=True)
-    bot.utils.user_message(output)
+    os.system(command)
+    bot.utils.user_message('Рассылка отключена!',id = 435170678)
+    
+    
     
 @bot.on.message('!рон')
 @bot.on.empty('self.id == 435170678')
 def start_mailing(self):
     command = "sudo supervisorctl start schedule_mailing"
-    output = subprocess.check_output(command, shell=True, text=True)
-    bot.utils.user_message(output)
+    os.system(command)
+    bot.utils.user_message('Рассылка запущена!', id = 435170678)
 
-@bot.on.message('!статус')
-@bot.on.empty('self.id == 435170678')
-def show_status(self):
-    command = "sudo supervisorctl status"
-    output = subprocess.check_output(command, shell=True, text=True)
-    bot.utils.user_message(output)
     
