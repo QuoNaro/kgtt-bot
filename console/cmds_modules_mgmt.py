@@ -43,7 +43,7 @@ WantedBy = multi-user.target
 def init_supervisor(env):
     
     #Установка supervisor
-    subprocess.call(['sudo', 'pip', 'install', 'supervisor'])
+    subprocess.call(['python3','-m','pip', 'install', 'supervisor'])
     unit_names = ('kgttbot','schedule_mailing')
     parrent_path = Path(__file__).parent.cwd()
     for name in unit_names:
@@ -51,7 +51,11 @@ def init_supervisor(env):
         [program:{name}]
         command={env} {parrent_path}/start_{name}.py
         autostart=true
-        autorestart=true'''
+        autorestart=true
+        redirect_stderr=true
+        stdout_logfile={parrent_path}/logs/{name}.log
+        '''
+        
         # Запись в папку
         with open(f'{parrent_path}/{name}.conf', 'w') as unit_file:
             unit_file.write(unit_content)   
@@ -60,7 +64,9 @@ def init_supervisor(env):
         supervisor_dir = '/etc/supervisor/conf.d/'
         subprocess.call(['sudo','mv',f'{parrent_path}/{name}.conf',supervisor_dir])
         
-    # Перезагрузка демонов
-    subprocess.call(['sudo', 'supervisorctl', 'daemon-reload'])
+    # Перезагрузка супервизора
+    subprocess.call(['sudo', 'service', 'supervisor', 'restart'])
+    subprocess.call(['sudo', 'service', 'supervisor', 'start'])
+    
 
 
