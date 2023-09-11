@@ -6,7 +6,7 @@ import vk_api.exceptions
 
 from loguru import logger
 from types import GeneratorType
-from config import config
+from config import config,global_dir
 from bot.utils.schedule import write_json,read_json,get_global_dictionary,TableParser,get_text
 from tiny_vk.database import Database
 from tiny_vk.utils import user_message
@@ -19,14 +19,14 @@ class ScheduleMailing:
   
   def __init__(self) -> None:
     self.reload_time : int =  config['table-reload-time']
-    self.database = Database(config['db-path'],'Users')
+    self.database = Database(f'{global_dir}/{config["db-path"]}','Users')
     self.tableparser = TableParser('1rGJ4_4BbSm0qweN7Iusz8d55e6uNr6bFRCv_j3W5fGU')
 
   def listener(self) -> GeneratorType:
     
     def get_old() -> dict:
       try:
-        return read_json(config['json-path'])
+        return read_json(f'{global_dir}/{config["json-path"]}')
       except Exception:
         return {}
 
@@ -67,6 +67,6 @@ class ScheduleMailing:
         except Exception:
           continue
           
-      write_json(config['json-path'], new_json)
+      write_json(f'{global_dir}/{config["json-path"]}', new_json)
       logger.info("Файл-расписание обновлен!")
       

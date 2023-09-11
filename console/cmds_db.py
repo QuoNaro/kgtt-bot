@@ -2,9 +2,9 @@
 import click
 from tiny_vk.database import Database
 from console.main import cli
-from config import config
+from config import global_dir,config
 
-db = Database(config['db-path'],'Users')
+db = Database(f'{global_dir}/{config["db-path"]}','Users')
 
 # Создание группы database
 @cli.group

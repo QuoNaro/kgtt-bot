@@ -4,7 +4,7 @@ from tiny_vk.utils import user_message
 from tiny_vk.database import Database
 
 from console.main import cli
-from config import config
+from config import config,global_dir
 
 
 @cli.group
@@ -21,7 +21,7 @@ def message(i,m):
 @utils.command()
 @click.option('-m',prompt="Введите сообщение пользователям", help="Сообщение пользователям", type = str)
 def messages(m):
-    db = Database(config['db-path'],'Users')
+    db = Database(f'{global_dir}/{config["db-path"]}','Users')
     for i in db.get_users():
         try:
             user_message(config['token'],i,m)

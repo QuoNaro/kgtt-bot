@@ -3,7 +3,7 @@ from loguru import logger
 from bot.utils.schedule import get_global_dictionary,write_json,TableParser
 from tiny_vk.database import Database
 from console.main import cli
-from config import config
+from config import config,global_dir
 
 
 @cli.command
@@ -15,11 +15,11 @@ def init(database,schedule):
     
     if schedule:
         global_dictionary = get_global_dictionary(TableParser(config['table-id']))
-        write_json(config['json-path'],global_dictionary)
+        write_json(f'{global_dir}/{config["json-path"]}',global_dictionary)
         logger.info('Данные из гугл таблицы получены!')
         
     if database:
-        Database(config['db-path'],'Users').create_table({'id': "INT",
+        Database(f'{global_dir}/{config["db-path"]}','Users').create_table({'id': "INT",
                                                 "state" : "TEXT",
                                                 'object' : 'TEXT',
                                                 'ruobr_login' : 'TEXT',
