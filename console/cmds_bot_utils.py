@@ -1,5 +1,5 @@
 import click
-
+import vk_api
 from tiny_vk.utils import user_message
 from tiny_vk.database import Database
 
@@ -20,10 +20,30 @@ def message(i,m):
 
 @utils.command()
 @click.option('-m',prompt="Введите сообщение пользователям", help="Сообщение пользователям", type = str)
-def messages(m):
-    db = Database(f'{global_dir}/{config["db-path"]}','Users')
-    for i in db.get_users():
+@click.option('--database',is_flag = True)
+def messages(m,d):
+    
+    if d:
+        vk_session = vk_api.VkApi(token=config['token'])
+        vk = vk_session.get_api()
+
+        # Получение списка бесед, в которых участвует ваш бот
+        conversations = vk.messages.getConversations(filter='all')
+        
+        # Сбор ID пользователей
+        user_ids = []
+        for conversation in conversations['items']:
+            peer = conversation['conversation']['peer']
+            if peer['type'] == 'user':
+                user_ids.append(peer['id'])
+
+    else:
+        db = Database(f'{global_dir}/{config["db-path"]}','Users')
+        user_ids = db.get_users()
+    
+    for i in user_ids:
         try:
             user_message(config['token'],i,m)
         except Exception:
+            print(i)
             pass
