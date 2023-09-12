@@ -20,19 +20,22 @@ class ScheduleMailing:
   
   def __init__(self) -> None:
     self.reload_time : int =  config['table-reload-time']
-    self.tableparser = TableParser('1rGJ4_4BbSm0qweN7Iusz8d55e6uNr6bFRCv_j3W5fGU')
+    
 
   def generator(self) -> GeneratorType:
     """Генерирует json объекты (старый и новый)"""
     while True:
+      tp = TableParser('1rGJ4_4BbSm0qweN7Iusz8d55e6uNr6bFRCv_j3W5fGU')
       old : dict = read_json(f'{global_dir}/{config["json-path"]}')
-      new : dict = get_global_dictionary(self.tableparser)
+      new : dict = get_global_dictionary(tp)
       yield (old,new)
       time.sleep(self.reload_time)
 
   def message_with_schedule(self) -> threading.Thread:
     try:
-      text = "[Изменения в расписании]\n"+get_text(self.new[self.group])
+      text = get_text(self.new[self.group]).splitlines()
+      text[0] = f'{text[0]} [Рассылка]'
+      text = '\n'.join(text)
       user_message(config['token'],self.id,text)
     except vk_api.exceptions.ApiError as e:
       logger.exception(f"Ошибка доступа для {self.id} : {e}")

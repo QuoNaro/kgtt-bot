@@ -331,7 +331,7 @@ def get_text(dictionary : dict) -> str :
         raise GroupNotFoundError("Группа не найдена")
         
     date = dictionary['date']
-    text = f'Расписание за {date}\n\n{text}'
+    text = f'Расписание на {date}\n\n{text}'
 
     return text
     
