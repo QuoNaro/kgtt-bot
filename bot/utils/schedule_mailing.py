@@ -20,7 +20,6 @@ class ScheduleMailing:
   
   def __init__(self) -> None:
     self.reload_time : int =  config['table-reload-time']
-    self.database = Database(f'{global_dir}/{config["db-path"]}','Users')
     self.tableparser = TableParser('1rGJ4_4BbSm0qweN7Iusz8d55e6uNr6bFRCv_j3W5fGU')
 
   def generator(self) -> GeneratorType:
@@ -56,6 +55,7 @@ class ScheduleMailing:
 
   def on(self):
     for old,new in self.generator():
+      self.database = Database(f'{global_dir}/{config["db-path"]}','Users')
       self.old, self.new = old,new
 
       # Рассылка всем пользователям , подписавшимся на рассылку

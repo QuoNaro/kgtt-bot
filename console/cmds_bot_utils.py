@@ -47,7 +47,7 @@ def messages(m,database,start):
     keyboard = None
     if start:
         keyboard = generate_keyboard(
-            ("Помощь","positive")
+            ("Начать","positive")
         )
  
         

@@ -18,7 +18,6 @@ def parameters(self):
                 (f"Пароль : {password(self.ruobr_password)}","secondary"),
                 None,
                 (f"Группа : {self.object}","secondary"),
-                (f"Статус рассылки : {['Выключена','Включена'][mail_status]}","secondary"),
                 None,
                 ("Помощь","positive"),
                 None,
@@ -46,12 +45,6 @@ class Parameters:
       bot.db.set_state(states.table_register)
       bot.utils.user_message('Введите свою учебную группу как в таблице', keyboard = keyboards.rcircle(), 
                             link=["https://docs.google.com/spreadsheets/d/1rGJ4_4BbSm0qweN7Iusz8d55e6uNr6bFRCv_j3W5fGU/edit#gid=0"])
-  
-  @bot.on.state(states.parameters)
-  def mailing(self):
-    if 'Статус рассылки' in self.text:
-      text = f'Для изменения рассылки перейдите по пути : \n{emoji.red_circle} -> Расписание -> Рассылка'
-      bot.utils.user_message(text)
   
   @bot.on.multiply(['Помощь'], [states.parameters])
   def helps(self):
