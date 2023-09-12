@@ -20,15 +20,13 @@ class Mailing:
     @bot.on.multiply(['Подписаться'],[states.mailing])
     def on(self):
         bot.db.update_field(category="mail",new=1)
-        mailing_status = 0 if self.mail is None else self.mail
-        bot.utils.user_message(f'Рассылка : {["Отключена","Включена"][mailing_status]}')
+        bot.utils.user_message('Рассылка : Включена')
         
     
     @bot.on.multiply(['Отписаться'],[states.mailing])
     def off(self):
         bot.db.update_field(category="mail",new=0)
-        mailing_status = 0 if self.mail is None else self.mail
-        bot.utils.user_message(f'Рассылка : {["Отключена","Включена"][mailing_status]}')
+        bot.utils.user_message('Рассылка : Отключена')
         
         
 
