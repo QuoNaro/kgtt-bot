@@ -5,7 +5,7 @@ from loguru import logger
 
 from ruobr_student import RuobrCookies,RuobrParser,AuthorizationError,DateNotFoundError
 from tiny_vk.utils import generate_keyboard
-from bot.utils.verify import validate
+from bot.utils.verify import validate , check_ruobr_auth
 from bot.main import bot
 from bot.data import keyboards
 from bot.data import states
@@ -13,9 +13,11 @@ from bot.data import emoji
 
 year_period = lambda y : f'{y}-{int(y)+1}'
 
+
+
 @bot.on.multiply(['Оценки'], [states.main])
 def marks(self):
-  if self.ruobr_login and self.ruobr_password:
+  if check_ruobr_auth(self.ruobr_login,self.ruobr_password):
     bot.db.set_state(states.marks)
     bot.utils.user_message('Напишите дату или выберите один из нескольких вариантов', keyboard =keyboards.marks())
   else:
@@ -96,8 +98,10 @@ def now_today(self):
   current_date = datetime.now().strftime('%d.%m.%Y')
   try:
     rp = RuobrParser(RuobrCookies(self.ruobr_login,self.ruobr_password))
-    marks = rp.marks().get_average(current_date)
-    bot.utils.user_message(f'Оценки на {current_date} \n\n{marks}')
+    last_marks = rp.marks().get_last()
+    marks = [i for i in last_marks if i.date.strftime('%d.%m.%Y') == current_date]
+    text = '\n'.join([f'{i.subject}: {i.mark}' for i in marks])
+    bot.utils.user_message(f'Оценки на {current_date} \n\n{text}')
   except DateNotFoundError:
     bot.utils.user_message('Оценки отстутствуют!')
 
