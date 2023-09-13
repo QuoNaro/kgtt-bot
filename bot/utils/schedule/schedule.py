@@ -192,25 +192,12 @@ class Group:
         return result
 
     def get_time(self) -> list[str]:
-        date_str = re.search(r'\d{2}\.\d{2}\.\d{4}', self.tableparser.get_title()).group()
-        date_obj = datetime.strptime(date_str, '%d.%m.%Y')
-        weekday_num = date_obj.isoweekday()
-        
-
         time = ['08:30 - 10:00',
                     '10:10 - 11:40',
                     '11:50 - 13:20',
                     '13:30 - 15:00',
                     '15:10 - 16:40',
                     '16:45 - 18:15']
-        
-        if weekday_num == 3:
-            time = ['08:30 - 10:00',
-                    '10:10 - 11:40',
-                    '11:50 - 12:20',
-                    '12:30 - 14:00',
-                    '14:10 - 15:40',
-                    '16:50 - 17:20']
         
         if (self.extra_index):
             for index in self.extra_index:
