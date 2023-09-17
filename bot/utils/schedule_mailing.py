@@ -43,7 +43,7 @@ class ScheduleMailing:
   def mailing(self):
     for user_id,group in self.database.get_mailing_ids('mail'):
       self.id = user_id
-      self.group = group
+      self.group = group.lower()
       
       try:
         assert self.old[self.group] == self.new[self.group]

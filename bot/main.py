@@ -9,8 +9,4 @@ bot = Bot(config['token'],dbfile=f'{global_dir}/{config["db-path"]}',table_name=
                                              'mail' : 'INT'})
 
 
-from bot.handlers.common import *
-from bot.handlers.parameters import *
-from bot.handlers.marks import *
-from bot.handlers.table_mailing import *
-from bot.handlers.table import *
+from bot.handlers import *  # noqa: F403, E402

@@ -13,7 +13,12 @@ from bot.data import emoji
 
 year_period = lambda y : f'{y}-{int(y)+1}'
 
-
+def string_month(date : str) -> str :
+  data = datetime.strptime(date, "%m.%Y")
+  num = data.month
+  strm = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'][num-1].lower()
+  return f'{strm} {data.year}-го'
+  
 
 @bot.on.multiply(['Оценки'], [states.main])
 def marks(self):
@@ -30,7 +35,7 @@ class Authentification():
     if self.text != emoji.red_circle:
       bot.db.update_field(category='ruobr_tmp_login', new = self.text)
       bot.db.set_state(states.ruobr_register[1])
-      bot.utils.user_message('Введите пароль от Ruobr')
+      bot.utils.user_message('Введите пароль от Cabinet Ruobr')
             
   @bot.on.state(states.ruobr_register[1])
   def password_reg(self):
@@ -100,6 +105,8 @@ def now_today(self):
     rp = RuobrParser(RuobrCookies(self.ruobr_login,self.ruobr_password))
     last_marks = rp.marks().get_last()
     marks = [i for i in last_marks if i.date.strftime('%d.%m.%Y') == current_date]
+    if not marks:
+      raise DateNotFoundError
     text = '\n'.join([f'{i.subject}: {i.mark}' for i in marks])
     bot.utils.user_message(f'Оценки на {current_date} \n\n{text}')
   except DateNotFoundError:
@@ -108,24 +115,25 @@ def now_today(self):
 @bot.on.multiply(['За месяц'], [states.marks])
 def now_month(self):
   try:
+    bot.utils.user_message(f'Ожидайте...')  
     current_date = datetime.now().strftime('%m.%Y')
     rp = RuobrParser(RuobrCookies(self.ruobr_login,self.ruobr_password))
     marks = rp.marks().get_average(current_date)
-    bot.utils.user_message(f'Средние оценки за {current_date} \n\n{marks}')
+    bot.utils.user_message(f'Средние оценки за {string_month(current_date)} \n\n{marks}')
   except DateNotFoundError:
     bot.utils.user_message(f'Оценки отстутствуют!')
     
 @bot.on.multiply(['За год'], [states.marks])
 def now_year(self):
   try:
+    bot.utils.user_message(f'Ожидайте...')  
     current_year = datetime.now().year if 9 >= datetime.now().month <= 12 else datetime.now().year()-1
     rp = RuobrParser(RuobrCookies(self.ruobr_login,self.ruobr_password))
     marks = rp.marks().get_average(str(current_year))
     bot.utils.user_message(f'Средние оценки за {year_period(current_year)} уч.год\n\n{marks}')
   except DateNotFoundError:
     bot.utils.user_message(f'Оценки отстутствуют!')
-    
-    
+       
 @bot.on.state(states.marks)
 def date_checker(self):
   try:
@@ -136,7 +144,7 @@ def date_checker(self):
     elif validate(self.text, '%m.%Y'):
       rp = RuobrParser(RuobrCookies(self.ruobr_login,self.ruobr_password))
       marks = rp.marks().get_average(self.text)
-      bot.utils.user_message(f'Средние оценки за {self.text} \n\n{marks}')
+      bot.utils.user_message(f'Средние оценки за {string_month(self.text)} \n\n{marks}')
     elif validate(self.text, '%d.%m.%Y'):
       rp = RuobrParser(RuobrCookies(self.ruobr_login,self.ruobr_password))
       marks = rp.marks().get_day_marks(self.text)

@@ -17,23 +17,6 @@ def main():
     keyboard.add_button(emj(':gear:'), color=VkKeyboardColor.SECONDARY)
     return keyboard.get_keyboard()
 
-def schedule():
-  keyboard = VkKeyboard()
-  keyboard.add_button("Из таблицы", color=VkKeyboardColor.SECONDARY)
-  keyboard.add_button("Рассылка", color=VkKeyboardColor.SECONDARY)
-  keyboard.add_line()
-  keyboard.add_button(emj(':hollow_red_circle:'),color=VkKeyboardColor.NEGATIVE)
-  return keyboard.get_keyboard()
-
-def mailing():
-  keyboard = VkKeyboard()
-  keyboard.add_button("Отписаться", color=VkKeyboardColor.SECONDARY)
-  keyboard.add_button("Подписаться", color=VkKeyboardColor.SECONDARY)
-  keyboard.add_line()
-  keyboard.add_button(emj(':hollow_red_circle:'),color=VkKeyboardColor.NEGATIVE)
-  
-  
-  return keyboard.get_keyboard()
 
 def parameters():
   keyboard = VkKeyboard()

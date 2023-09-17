@@ -264,7 +264,7 @@ def get_global_dictionary(tableparser : TableParser) -> dict[str,dict]:
     for group in tableparser.get_groups():
         try:
             local_dictionary = Group(tableparser,group).get_dictionary()
-            global_dictionary[group] = local_dictionary
+            global_dictionary[group.lower()] = local_dictionary
         except EmptyScheduleError:
             global_dictionary[group] = None
         except Exception as Error:
