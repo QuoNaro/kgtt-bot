@@ -51,8 +51,9 @@ class ScheduleMailing:
       except AssertionError:
         # Запускаем поток для отправки рассылки пользователю
         threading.Thread(target=self.message_with_schedule).start()
-      except KeyError:
-        logger.info(f"Группа {self.group} для {self.id} не найдена! Пропуск!")
+      except KeyError as ke:
+        
+        logger.info(f"Группа {self.group} для {self.id} не найдена! Пропуск!\n{ke}")
       except Exception:
         pass
 

@@ -263,12 +263,13 @@ def get_global_dictionary(tableparser : TableParser) -> dict[str,dict]:
     global_dictionary = {}
     for group in tableparser.get_groups():
         try:
+            group_key = group.lower()
             local_dictionary = Group(tableparser,group).get_dictionary()
-            global_dictionary[group.lower()] = local_dictionary
+            global_dictionary[group_key] = local_dictionary
         except EmptyScheduleError:
-            global_dictionary[group] = None
+            global_dictionary[group_key] = None
         except Exception as Error:
-            global_dictionary[group] = str(Error)        
+            global_dictionary[group_key] = str(Error)        
     return global_dictionary
 
 def read_json(abs_path : str) -> dict:
