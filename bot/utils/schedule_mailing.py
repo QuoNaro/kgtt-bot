@@ -12,8 +12,12 @@ from tiny_vk.database import Database
 from tiny_vk.utils import user_message
 
 
-
-
+def get_vk_name(token : str,id):
+  vk = vk_api.VkApi(token=token)
+  user = vk.method("users.get", {"user_ids": id})
+  fullname = user[0]['first_name'] +  ' ' + user[0]['last_name']
+  return fullname
+  
 logger.add(f"{global_dir}/logs/schedule.log", level='INFO',format="<{level}> {time} - {message}", rotation="10MB", compression="zip")
 
 class ScheduleMailing:
@@ -53,7 +57,7 @@ class ScheduleMailing:
         threading.Thread(target=self.message_with_schedule).start()
       except KeyError as ke:
         
-        logger.info(f"Группа {self.group} для {self.id} не найдена! Пропуск!\n{ke}")
+        logger.info(f"Группа {self.group} для {self.id}({get_vk_name(config['token'],self.id)}) не найдена! Пропуск!\n{ke}")
       except Exception:
         pass
 
