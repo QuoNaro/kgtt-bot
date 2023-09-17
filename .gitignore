@@ -160,3 +160,9 @@ cython_debug/
 #.idea/
 .env
 config.toml
+*.db
+*.json
+tempCodeRunnerFile.*
+test.py
+.python-version
+/logs
