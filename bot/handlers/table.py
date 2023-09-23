@@ -27,14 +27,17 @@ def schedule(self):
         logger.exception(f'Группы {self.object} нет в таблице')
         bot.utils.user_message('Группа не найдена!')
     else:
-      bot.utils.user_message(f'Вы не зарегистрированы\nПуть для регистрации : {emoji.red_circle} → {emoji.gear} → Группа')
+      bot.db.set_state(states.table_register)
+      bot.utils.user_message('Введите свою учебную группу как в таблице', keyboard = keyboards.rcircle(), 
+                            link=["https://clck.ru/psvfm"])
 
 class Authentification:
     @bot.on.state(states.table_register)
     def reg(self):
         if self.text != emoji.red_circle:
-            bot.db.update_field(category="object",new=self.text)
-            bot.db.set_state(states.main)
-            bot.db.update_field(category="mail",new=1)
-            bot.utils.user_message("Приятного использования! Рассылка включена !", keyboard=keyboards.main())
+          bot.db.update_field(category="object",new=self.text)
+          bot.db.set_state(states.main)
+          bot.db.update_field(category="mail",new=1)
+          bot.utils.user_message("Приятного использования! Рассылка включена!\nГруппу всегда можно поменять в параметрах"
+                                 , keyboard=keyboards.main())
             

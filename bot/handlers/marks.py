@@ -25,8 +25,10 @@ def marks(self):
   if check_ruobr_auth(self.ruobr_login,self.ruobr_password):
     bot.db.set_state(states.marks)
     bot.utils.user_message('Напишите дату или выберите один из нескольких вариантов', keyboard =keyboards.marks())
-  else:
-    bot.utils.user_message(f'Вы не авторизованы\nПуть : {emoji.red_circle} → {emoji.gear} → Авторизация Ruobr')
+  elif not self.ruobr_password and  not self.ruobr_login :
+    bot.utils.user_message('Вы не авторизованы в Ruobr. Приступаем к регистрации!')
+    bot.db.set_state(states.ruobr_register[0])
+    bot.utils.user_message('Введите логин от Cabinet Ruobr', keyboard = keyboards.rcircle())
 
 class Authentification():
   

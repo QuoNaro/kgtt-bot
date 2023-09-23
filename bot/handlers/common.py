@@ -9,7 +9,7 @@ import os
 
 @bot.on.message('Начать', 'Начало', 'Старт', '/start', '/Начать',next_state = states.main)
 def start(self):
-    bot.utils.user_message('За работу!', keyboard = keyboards.main())
+    bot.utils.user_message('Добро пожаловать!', keyboard = keyboards.main())
 
 @bot.on.message('!сброс', '/сброс')
 def reset(self):
@@ -23,7 +23,6 @@ def back(self):
 @bot.on.empty(f"not self.state")
 def to_main_state(self):
     bot.db.set_state(states.main)
-
 
 @bot.on.empty('True')
 def stop_mailing(self):
