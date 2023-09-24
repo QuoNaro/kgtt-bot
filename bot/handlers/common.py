@@ -11,7 +11,7 @@ import os
 @bot.on.message('Начать', 'Начало', 'Старт', '/start', '/Начать',next_state = states.main)
 def start(self):
     bot.utils.user_message('Добро пожаловать!', keyboard = keyboards.main())
-    bot.utils.user_message('Подпишитесь на сообщество :)',link=['https://vk.com/widget_community.php?act=a_subscribe_box&oid=-214878797&state=1'])
+    bot.utils.user_message('Подпишитесь на сообщество :)',link=['https://vk.com/kgttbot'])
 
 @bot.on.message('!сброс', '/сброс')
 def reset(self):
