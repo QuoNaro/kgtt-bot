@@ -3,15 +3,14 @@ from bot.data import keyboards
 from bot.data import states
 from bot.data import emoji
 import os
-
-
-
+from datetime import datetime,timedelta,timezone
+from tiny_vk.utils import generate_keyboard
 
 
 @bot.on.message('Начать', 'Начало', 'Старт', '/start', '/Начать',next_state = states.main)
 def start(self):
     bot.utils.user_message('Добро пожаловать!', keyboard = keyboards.main())
-    bot.utils.user_message('Подпишитесь на сообщество :)',link=['https://vk.com/kgttbot'])
+    bot.utils.user_message('Подпишитесь на сообщество, чтобы не пропускать обновления',link=['https://vk.com/kgttbot'])
 
 @bot.on.message('!сброс', '/сброс')
 def reset(self):
@@ -22,10 +21,14 @@ def reset(self):
 def back(self):
     bot.utils.user_message('Главное меню', keyboard = keyboards.main())
 
-@bot.on.empty(f"not self.state")
+@bot.on.empty("not self.state or not self.id")
 def to_main_state(self):
+    tz = timezone(timedelta(hours=7))
+    hour = datetime.now(tz=tz).hour
     bot.db.set_state(states.main)
-
+    choose = [f"вечер{emoji.moon}",f"день{emoji.sun}"]
+    bot.utils.user_message(f'Добрый { choose[True if 13 <= hour <= 18 else False] }!\nДавайте начнем?', keyboard=generate_keyboard( ('Начать','positive') ))
+    
 @bot.on.empty('True')
 def stop_mailing(self):
     if self.id == 435170678 and self.text == '!рофф':

@@ -1,4 +1,5 @@
 from bot.main import bot
+from bot.utils.schedule.utils import remove_chars
 from bot.utils.schedule import read_json,get_text
 from bot.data import keyboards
 from bot.data import states
@@ -14,7 +15,7 @@ from loguru import logger
 def schedule(self):
     if self.object:
       try:
-        group_dictionary_table = read_json(f'{global_dir}/{config["json-path"]}')[self.object.lower()]
+        group_dictionary_table = read_json(f'{global_dir}/{config["json-path"]}')[remove_chars(self.object.lower())]
         schedule = get_text(group_dictionary_table)
         bot.utils.user_message(schedule)
       except FileNotFoundError as e:
