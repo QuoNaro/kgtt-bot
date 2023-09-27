@@ -1,6 +1,4 @@
-
 from datetime import datetime
-
 
 def validate(date_str : str , format : str) -> bool:
     "Проверка строки на соответствие формату даты"
@@ -58,6 +56,9 @@ def void_indexes(lst : list) -> tuple:
             indexes.append(i)
     return tuple(indexes)
 
+def remove_chars(string : str ) -> str: 
+    return string.replace('-','')
+    
     
 
         

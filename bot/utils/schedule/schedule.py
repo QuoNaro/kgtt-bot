@@ -1,6 +1,6 @@
 from green_box import Table,Matrix
 from .exceptions import GroupNotFoundError , EmptyScheduleError
-from .utils import validate , get_extra_index, get_eng_string , find_range,clean,void_indexes
+from .utils import validate , get_extra_index, get_eng_string , find_range,clean,void_indexes,remove_chars
 import re
 from datetime import datetime
 import json
@@ -263,7 +263,7 @@ def get_global_dictionary(tableparser : TableParser) -> dict[str,dict]:
     global_dictionary = {}
     for group in tableparser.get_groups():
         try:
-            group_key = group.lower()
+            group_key = remove_chars(group.lower())
             local_dictionary = Group(tableparser,group).get_dictionary()
             global_dictionary[group_key] = local_dictionary
         except EmptyScheduleError:

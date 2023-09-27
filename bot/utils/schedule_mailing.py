@@ -8,6 +8,7 @@ from loguru import logger
 from types import GeneratorType
 from config import config,global_dir
 from bot.utils.schedule import write_json,read_json,get_global_dictionary,TableParser,get_text
+from bot.utils.schedule.utils import remove_chars
 from tiny_vk.database import Database
 from tiny_vk.utils import user_message
 
@@ -41,23 +42,21 @@ class ScheduleMailing:
       text[0] = f'{text[0]} [Рассылка]'
       text = '\n'.join(text)
       user_message(config['token'],self.id,text)
-    except vk_api.exceptions.ApiError as e:
-      logger.exception(f"Ошибка доступа для {self.id} : {e}")
+    except vk_api.exceptions.ApiError:
+      logger.exception(f"Пользователь - {self.id} ({get_vk_name(config['token'],self.id)}) запретил боту присылать сообщения")
 
   def mailing(self):
     for user_id,group in self.database.get_mailing_ids('mail'):
       self.id = user_id
-      self.group = group.lower()
+      self.group = remove_chars(group.lower())
       
       try:
         assert self.old[self.group] == self.new[self.group]
-          
       except AssertionError:
         # Запускаем поток для отправки рассылки пользователю
         threading.Thread(target=self.message_with_schedule).start()
-      except KeyError as ke:
-        
-        logger.info(f"Группа {self.group} для {self.id}({get_vk_name(config['token'],self.id)}) не найдена! Пропуск!\n{ke}")
+      except KeyError as e:
+        logger.exception(f"Группа {self.group} для {self.id}({get_vk_name(config['token'],self.id)}) не найдена! Пропуск!\n{e}")
       except Exception:
         pass
 
