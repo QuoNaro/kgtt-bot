@@ -71,7 +71,7 @@ class Authentification():
 class Excel():
   @bot.on.multiply(['Таблица оценок'],[states.marks],next_state=states.excel)
   def get_excel(self):
-    current_student_year = datetime.now().year if 9 >= datetime.now().month <= 12 else datetime.now().year()-1
+    current_student_year = datetime.now().year if 9 <= datetime.now().month <= 12 else datetime.now().year-1
     buttons = [(f"{current_student_year}","secondary"),None,(emoji.red_circle,"negative")]
     year_keyboard = generate_keyboard(*buttons)
     bot.utils.user_message(f'Введите год',keyboard=year_keyboard)
