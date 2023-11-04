@@ -1,9 +1,63 @@
 from green_box import Table,Matrix
-from .exceptions import GroupNotFoundError , EmptyScheduleError
-from .utils import validate , get_extra_index, get_eng_string , find_range,clean,void_indexes,remove_chars
 import re
 from datetime import datetime
-import json
+
+from .exceptions import GroupNotFoundError , EmptyScheduleError
+
+
+
+def validate(date_str : str , format : str) -> bool:
+    "Проверка строки на соответствие формату даты"
+    try:
+        result = bool(datetime.strptime(date_str, format))
+    except ValueError:
+        result = False
+    return result
+
+def get_extra_index(table : list[list] ) -> tuple: 
+    lesson = table[0][::2]
+    lesson_2 = table[2][::2]
+    return tuple([i for i,(l1,l2) in enumerate(zip(lesson,lesson_2)) if l1 and l2])
+
+def get_eng_string(*args : list[str]) -> list:
+    
+    result_arrays = []
+    for words in args:
+      array = []
+      for word in words:
+        english_chars = ""
+        word = str(word)
+        for char in word:
+          if char.isalpha() and char.isascii():
+            english_chars += char
+        array.append(english_chars)
+      result_arrays.append(array)
+    return result_arrays
+  
+def find_range(lst : list) -> tuple:
+  first, last = None, None
+  for i, s in enumerate(lst):
+      if s != '':
+          if first is None:
+              first = i
+          last = i
+  return (first, last+1) if first is not None else (None, None)
+
+def clean(input_strings :list[str], to_remove :list[str]) -> list[str]:
+    result = []
+    for string, dist_string in zip(input_strings,to_remove):
+        low_string,low_dist = string.lower(),dist_string.lower()
+        format_string = low_string.replace(low_dist,'')
+        cut_key =len(format_string)
+        result.append(string[:cut_key])
+    return result
+
+def void_indexes(lst : list) -> tuple:
+    indexes = []
+    for i,s in enumerate(lst):
+        if s == '':
+            indexes.append(i)
+    return tuple(indexes)
 
 
 class TableParser:
@@ -258,31 +312,7 @@ class Group:
         }
         return dictionary
         
-
-def get_global_dictionary(tableparser : TableParser) -> dict[str,dict]:
-    global_dictionary = {}
-    for group in tableparser.get_groups():
-        try:
-            group_key = remove_chars(group.lower())
-            local_dictionary = Group(tableparser,group).get_dictionary()
-            global_dictionary[group_key] = local_dictionary
-        except EmptyScheduleError:
-            global_dictionary[group_key] = None
-        except Exception as Error:
-            global_dictionary[group_key] = str(Error)        
-    return global_dictionary
-
-def read_json(abs_path : str) -> dict:
-    with open(abs_path,'r',encoding='UTF-8') as f:
-        dictionary = json.loads(f.read())
-        return dictionary
-
-def write_json(abs_path : str , dictionary : dict):
-    with open(abs_path,'w',encoding='UTF-8') as f:
-        json.dump(obj=dictionary,fp = f,ensure_ascii=False,indent=4)
-
 def get_text(dictionary : dict) -> str :
-    # |{time}|[{cabinets}] {lessons} - {teachers} -> {distance}
     
     def get_format_string(formatting : dict, local_dictionary : dict) -> str:
         format_string = ''
@@ -299,12 +329,14 @@ def get_text(dictionary : dict) -> str :
         
     
     text = ''
-    formatting ={'numbers' : '({numbers})',
-                 'time' : '|{time}|',
+    formatting ={'numbers' : '({numbers}) ',
+                 'time' : '{time} ',
                  'cabinets' : '[{cabinets}]',
-                 'lessons' : ' {lessons}',
-                 'teachers' : ' - {teachers}',
-                 'distance' : ' -> {distance}'}
+                 'distance' : ' -> {distance}',
+                 'lessons' : ' \n{lessons}',
+                 'teachers' : '\n -- {teachers} --',
+                 
+                 }
     
 
     # Каждая иттерация - одна строка
@@ -315,6 +347,7 @@ def get_text(dictionary : dict) -> str :
             if len(void_indexes(local_dictionary.values())) > 2:
                 continue
             text+= get_format_string(formatting,local_dictionary)
+            text+= '\n'
     except AttributeError:
         raise GroupNotFoundError("Группа не найдена")
         
