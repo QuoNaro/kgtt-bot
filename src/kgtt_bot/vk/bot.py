@@ -33,7 +33,6 @@ class Bot:
     user = self.__vk.method("users.get", {"user_ids": self.message.user_id})
     fullname = user[0]['first_name'] +  ' ' + user[0]['last_name']
     
-    
     info = self.db.cursor().execute('SELECT * FROM Users WHERE UserID=?', (self.message.user_id, )).fetchone()
     if info is None:
       self.db.cursor().execute(f'INSERT INTO Users (UserID,UserName) VALUES ({self.message.user_id},"{fullname}");')
@@ -41,6 +40,9 @@ class Bot:
       self.db.cursor().execute(f'INSERT INTO Ruobr (UserID) VALUES ({self.message.user_id});')
       self.db.cursor().execute(f'INSERT INTO UserGroups (UserID) VALUES ({self.message.user_id});')
       self.db.commit()
+      
+    if not bool(self.info.UserName):
+      self.db.cursor().execute(f'UPDATE Users SET UserName = "{fullname}" ;')  
 
   def __iteration(self):
     """Одна итерация бесконечного цикла прослушки"""
@@ -52,9 +54,7 @@ class Bot:
     self.__new_user()
     for handler in HANDLERS:
       handler(self)
-  
-   
-    
+
   def __run(self) -> None:
     """Запуск бота"""
     for event in self.__longpoll.listen():
