@@ -1,0 +1,7 @@
+emoji
+vk-api
+ruobr-student
+python-dateutil
+loguru
+packages/vk
+packages/schedule
