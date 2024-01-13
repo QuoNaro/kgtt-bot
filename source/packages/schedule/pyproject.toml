@@ -1,0 +1,9 @@
+[project]
+name = "schedule"
+authors = [{name = "quonaro", email = "quonaro@mail.ru"}]
+version = "0.2.0"
+requires-python = ">=3.11"
+dependencies = [
+    "green-box"
+]
+

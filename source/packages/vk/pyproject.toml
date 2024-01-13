@@ -1,0 +1,12 @@
+[project]
+name = "vk"
+authors = [{name = "quonaro", email = "quonaro@mail.ru"}]
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+    "requests",
+    "vk-api"
+]
+
+
+
