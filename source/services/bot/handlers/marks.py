@@ -4,11 +4,9 @@ from datetime import datetime
 from ruobr_student.exceptions import AuthorizationError,DateNotFoundError
 from ruobr_student import RuobrCookies,RuobrParser
 
-from kgtt_bot.bot.main import kgtt
-from kgtt_bot.vk import Bot, generate_keyboard
-from kgtt_bot import dbutils
-from kgtt_bot.bot.data import keyboards,states,emoji
-
+from start import kgtt
+from data import keyboards,states,emoji
+from vk import Bot, generate_keyboard,dbutils
 class IncompleteProcessError(Exception):
   """Класс-исключение для обозначения незавершенных процессов"""
 

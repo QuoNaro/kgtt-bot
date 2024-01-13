@@ -1,5 +1,5 @@
 """Утилиты для работы с базой данных КГТТ бота"""
-from .vk import Bot
+from .bot import Bot
 
 def set_state(self : Bot, state : str) -> None:
     """Функция 

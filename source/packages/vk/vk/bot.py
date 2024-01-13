@@ -42,7 +42,7 @@ class Bot:
       self.db.commit()
       
     if not bool(self.info.UserName):
-      self.db.cursor().execute(f'UPDATE Users SET UserName = "{fullname}" ;')  
+      self.db.cursor().execute(f'UPDATE Users SET UserName = "{fullname}" WHERE UserID = {self.message.user_id};')  
 
   def __iteration(self):
     """Одна итерация бесконечного цикла прослушки"""

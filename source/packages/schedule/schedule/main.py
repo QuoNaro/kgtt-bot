@@ -312,7 +312,7 @@ class Group:
         }
         return dictionary
         
-def get_text(dictionary : dict) -> str :
+def get_text(dictionary : dict, group : str = None) -> str :
     
     def get_format_string(formatting : dict, local_dictionary : dict) -> str:
         format_string = ''
@@ -352,7 +352,10 @@ def get_text(dictionary : dict) -> str :
         raise GroupNotFoundError("Группа не найдена")
         
     date = dictionary['date']
-    text = f'Расписание на {date}\n\n{text}'
+    message = f'Расписание на {date}'
+    if group :
+        message += f"\nГруппа : {group}"
+    message += f"\n\n\n{text}"
 
-    return text
+    return message
     

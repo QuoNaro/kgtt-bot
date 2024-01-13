@@ -1,9 +1,7 @@
-from kgtt_bot.bot.main import kgtt
-from kgtt_bot.vk import Bot
-from kgtt_bot import dbutils
-from kgtt_bot.bot.data import keyboards,states,emoji
-
-from kgtt_bot.schedule import get_text
+from start import kgtt
+from data import keyboards,states,emoji
+from vk import Bot, generate_keyboard,dbutils
+from schedule import get_text
 
 import json
 from string import punctuation
@@ -14,20 +12,22 @@ import sqlite3
 def schedule(self : Bot):
     if self.info.UserGroup:
       try:
-        request = self.db.cursor().execute(f"""SELECT json(Schedule) 
+        request = self.db.cursor().execute(f"""SELECT json(Schedule)
                                       FROM StudGroups 
-                                      WHERE StudGroup = '{self.info.UserGroup}';""").fetchone()[0]
-        schedule = get_text(json.loads(request))
+                                      WHERE StudGroup = '{self.info.UserGroup}';""")
+        
+        
+        request = request.fetchone()[0]
+        
+        schedule = get_text(json.loads(request),self.info.UserGroup)
         kgtt.utils.user_message(schedule)
 
-      except sqlite3.OperationalError:
+      except sqlite3.OperationalError as e:
         kgtt.utils.user_message(f'Расписания для группы {self.info.UserGroup} не найдено!')
       
-      except TypeError :
+      except TypeError or IndexError:
         kgtt.utils.user_message('Группа не найдена!')
       
-      except IndexError:
-        kgtt.utils.user_message('Группа не найдена!')
 
     else:
       dbutils.set_state(self, states.table_register)

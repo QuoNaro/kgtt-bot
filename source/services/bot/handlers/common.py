@@ -1,8 +1,6 @@
-from kgtt_bot.vk import Bot,generate_keyboard
-from kgtt_bot import dbutils
-from kgtt_bot.bot.main import kgtt
-from kgtt_bot.bot.data import keyboards,states,emoji
-
+from start import kgtt
+from data import keyboards,states,emoji
+from vk import Bot, generate_keyboard,dbutils
 
 @kgtt.on.empty('self.info.State == None and self.message.text != "Начать"')
 def main_menu(self : Bot):
@@ -25,6 +23,10 @@ def back(self : Bot):
     dbutils.set_state(self,states.main)
     self.utils.user_message('Главное меню', keyboard = keyboards.main())
 
-
+@kgtt.on.message('Из таблицы', 'Рассылка')
+def old_commands(self : Bot):
+    dbutils.set_state(self,states.main)
+    self.utils.user_message('Данной функции больше не существует, возвращаемся в главное меню', keyboard = keyboards.main())
+    
 
     

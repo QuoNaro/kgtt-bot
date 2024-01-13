@@ -6,9 +6,12 @@ import json
 import vk_api
 import vk_api.exceptions
 
-from kgtt_bot.schedule import TableParser,get_text,Group
-from kgtt_bot.vk import user_message
+from schedule import TableParser,get_text,Group
+from vk import user_message
+import os
+from loguru import logger
 
+logger.add('logs/mailing.log',format="|{level}|{time:DD-MMMM-YYYY HH:mm:ss}\n    {message}")
 
 class ScheduleMailing:
   
@@ -56,20 +59,25 @@ class ScheduleMailing:
     
     """
     while True:
-      tp = TableParser('1rGJ4_4BbSm0qweN7Iusz8d55e6uNr6bFRCv_j3W5fGU')
-      old : dict = self.get_old_json(tp)
-      new : dict = self.get_new_json(tp)
-      yield (old,new)
-      time.sleep(self.reload_time)
+      try:
+        tp = TableParser('1rGJ4_4BbSm0qweN7Iusz8d55e6uNr6bFRCv_j3W5fGU')
+        old : dict = self.get_old_json(tp)
+        new : dict = self.get_new_json(tp)
+        yield (old,new)
+        time.sleep(self.reload_time)
+      except KeyboardInterrupt:
+        logger.info('Stop mailing')
+        exit()
+
 
   def message_with_schedule(self) -> None:
     try:
-      text = get_text(self.new[self.group]).splitlines()
-      text[0] = f'{text[0]} [Рассылка]'
+      text = get_text(self.new[self.group], self.group).splitlines()
+      text[0] = f'[Рассылка]\n\n{text[0]} '
       text = '\n'.join(text)
       user_message(self.__token, self.id,text)
-    except vk_api.exceptions.ApiError:
-      print('Ошибка отправки сообщения')
+    except vk_api.exceptions.ApiError as e:
+      logger.error(f'Ошибка отправки сообщения для {self.id} : {e.error}')
 
   def mailing(self):
     
@@ -78,6 +86,7 @@ class ScheduleMailing:
         return request.fetchall()
     
     MAILING_IDS : tuple = get_mailing_list()
+    c,err_grp=0,[]
     for user_id,group in MAILING_IDS:
       self.id = user_id
       self.group = group
@@ -86,15 +95,20 @@ class ScheduleMailing:
       except AssertionError:
         # Запускаем поток для отправки рассылки пользователю
         threading.Thread(target=self.message_with_schedule).start()
-      except KeyError: 
-        print(f'Группа --{self.group}-- не найдена в таблице')
+      except KeyError:
+        c+=1
+        err_grp.append(self.group)
         continue
+    if c != 0:
+      logger.error(f'{c} groups not avalible :\n{", ".join( set(err_grp) )}')
 
   def start(self):
+    logger.info('Start mailing')
     for old, new in self.get_dictionaries():
-      self.old, self.new = old,new
-      # Рассылка всем пользователям , подписавшимся на рассылку
-      self.mailing()
-      self.FillStudGroups(self.get_new_json(TableParser('1rGJ4_4BbSm0qweN7Iusz8d55e6uNr6bFRCv_j3W5fGU')))
-
-        
+        self.old, self.new = old,new
+        # Рассылка всем пользователям , подписавшимся на рассылку
+        self.mailing()
+        self.FillStudGroups(self.get_new_json(TableParser('1rGJ4_4BbSm0qweN7Iusz8d55e6uNr6bFRCv_j3W5fGU')))
+  
+if __name__ == '__main__':
+    ScheduleMailing(os.getenv('TOKEN'),database='database/kgtt.sqlite',reload_time=600).start()
