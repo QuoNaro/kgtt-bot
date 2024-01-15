@@ -1,0 +1,13 @@
+[project]
+name = "green_box"
+authors = [{name = "quonaro", email = "quonaro@mail.ru"}]
+version = "0.2.0"
+requires-python = ">=3.11"
+dependencies = [
+    "requests",
+    "openpyxl",
+    "numpy"
+]
+
+
+
