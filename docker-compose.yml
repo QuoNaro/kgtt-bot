@@ -6,6 +6,7 @@ services:
     build:
       args:
         - NAME=mailing
+      context: .
     volumes:
       - ./database/kgtt.sqlite:/app/database/kgtt.sqlite
       - ./logs:/app/logs/
@@ -16,6 +17,7 @@ services:
     build:
       args:
         - NAME=bot
+      context: .
     volumes:
       - ./database/kgtt.sqlite:/app/database/kgtt.sqlite
       - ./logs:/app/logs/
